@@ -1,0 +1,23 @@
+[
+  {
+    "memory_ids": [],
+    "scenario": "queue-delay",
+    "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+    "passed": true,
+    "failures": [],
+    "warnings": [],
+    "required_tools": {
+      "get_callback_attempts": true
+    },
+    "forbidden_claims": [],
+    "evaluation_scope": "structured_contracts_and_workflow",
+    "prose_evaluated": false,
+    "premature_closure_count": 0,
+    "tool_call_count": 3,
+    "model_call_count": 4,
+    "api_attempt_count": 4,
+    "latency_ms": 28546,
+    "input_tokens": 12942,
+    "output_tokens": 2310
+  }
+]

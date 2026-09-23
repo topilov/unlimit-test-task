@@ -1,0 +1,172 @@
+[
+  {
+    "at": "2026-09-22T10:05:00Z",
+    "turns": [
+      {
+        "kind": "tool_call",
+        "tool_call": {
+          "name": "get_callback_attempts",
+          "arguments": {
+            "payment_ids": [
+              "p1",
+              "p2",
+              "p3"
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Receiver endpoint may reject callbacks",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          },
+          {
+            "id": "H2",
+            "statement": "Callbacks may be delayed before dispatch",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          }
+        ],
+        "open_questions": []
+      },
+      {
+        "kind": "tool_call",
+        "tool_call": {
+          "name": "get_provider_status",
+          "arguments": {}
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Receiver failure remains unverified",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": [
+              "Callback delivery attempts"
+            ]
+          },
+          {
+            "id": "H2",
+            "statement": "Dispatch delay remains unverified",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": [
+              "Queue telemetry"
+            ]
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q1",
+            "question": "Can callback telemetry be restored?",
+            "why_it_matters": "Needed to distinguish the failure mechanism and verify recovery."
+          }
+        ]
+      },
+      {
+        "kind": "final",
+        "final": {
+          "summary": "Payments are known but callback telemetry is unavailable. The provider green status is stale. No failure domain or root cause can be established.",
+          "failure_domain": "unknown",
+          "root_cause_status": "unknown",
+          "hypotheses": [
+            {
+              "id": "H1",
+              "statement": "Receiver failure remains unverified",
+              "status": "open",
+              "supporting_evidence": [
+                "@base"
+              ],
+              "contradicting_evidence": [],
+              "missing_evidence": [
+                "Callback delivery attempts"
+              ]
+            },
+            {
+              "id": "H2",
+              "statement": "Dispatch delay remains unverified",
+              "status": "open",
+              "supporting_evidence": [
+                "@base"
+              ],
+              "contradicting_evidence": [],
+              "missing_evidence": [
+                "Queue telemetry"
+              ]
+            }
+          ],
+          "open_questions": [
+            {
+              "id": "Q1",
+              "question": "Obtain current callback attempts and queue telemetry",
+              "why_it_matters": "Needed to distinguish the failure mechanism and verify recovery."
+            }
+          ],
+          "evidence_ids": [
+            "@base",
+            "@callbacks",
+            "@provider"
+          ],
+          "executed_tools": [
+            "get_callback_attempts",
+            "get_provider_status"
+          ],
+          "recommended_owner": "tech_ops",
+          "recommended_action": "continue_investigation",
+          "claims": [
+            "callback_source_incomplete",
+            "provider_status_stale"
+          ]
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Receiver failure remains unverified",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": [
+              "Callback delivery attempts"
+            ]
+          },
+          {
+            "id": "H2",
+            "statement": "Dispatch delay remains unverified",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": [
+              "Queue telemetry"
+            ]
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q1",
+            "question": "Obtain current callback attempts and queue telemetry",
+            "why_it_matters": "Needed to distinguish the failure mechanism and verify recovery."
+          }
+        ]
+      }
+    ]
+  }
+]

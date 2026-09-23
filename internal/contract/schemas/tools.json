@@ -1,0 +1,62 @@
+[
+  {
+    "name": "get_payment_summary",
+    "description": "Count unique incident payments; pending does not mean failed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "cohort": {
+          "type": "string",
+          "enum": [
+            "incident"
+          ]
+        }
+      },
+      "required": [
+        "cohort"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_callback_attempts",
+    "description": "Inspect callback attempts for IDs from the authoritative original cohort.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "payment_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 200
+        }
+      },
+      "required": [
+        "payment_ids"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_queue_health",
+    "description": "Inspect callback pre-dispatch queue health.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "get_provider_status",
+    "description": "Inspect provider context; stale green is not proof of current health.",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    }
+  }
+]

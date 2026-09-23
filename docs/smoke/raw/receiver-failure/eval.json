@@ -1,0 +1,23 @@
+[
+  {
+    "memory_ids": [],
+    "scenario": "receiver-failure",
+    "incident_id": "6d8c1ca7-2169-4ffa-9e36-b862f954a06d",
+    "passed": true,
+    "failures": [],
+    "warnings": [],
+    "required_tools": {
+      "get_callback_attempts": true
+    },
+    "forbidden_claims": [],
+    "evaluation_scope": "structured_contracts_and_workflow",
+    "prose_evaluated": false,
+    "premature_closure_count": 0,
+    "tool_call_count": 3,
+    "model_call_count": 4,
+    "api_attempt_count": 4,
+    "latency_ms": 30941,
+    "input_tokens": 13202,
+    "output_tokens": 2864
+  }
+]

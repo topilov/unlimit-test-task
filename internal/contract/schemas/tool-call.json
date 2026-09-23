@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "arguments": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "hypotheses": {
+      "$ref": "#/$defs/hypotheses"
+    },
+    "open_questions": {
+      "$ref": "#/$defs/open_questions"
+    }
+  },
+  "required": [
+    "arguments",
+    "hypotheses",
+    "open_questions"
+  ],
+  "additionalProperties": false
+}

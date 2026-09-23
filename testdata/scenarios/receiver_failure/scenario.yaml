@@ -1,0 +1,10 @@
+name: receiver-failure
+description: Completed payments, merchant orders not updated
+started_at: 2026-09-22T10:05:00Z
+critical_merchant: false
+scope:
+  merchant_id: merchant_demo
+  method: demo_apm
+  environment: sandbox
+  window_start: 2026-09-22T10:00:00Z
+  window_end: 2026-09-22T10:05:00Z

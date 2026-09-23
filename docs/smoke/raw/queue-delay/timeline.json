@@ -1,0 +1,1091 @@
+[
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "incident_created",
+    "data": {
+      "id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "clock": "2026-09-22T10:05:00Z",
+      "scope": {
+        "method": "demo_apm",
+        "window_end": "2026-09-22T10:05:00Z",
+        "environment": "sandbox",
+        "merchant_id": "merchant_demo",
+        "window_start": "2026-09-22T10:00:00Z"
+      },
+      "cursor": 0,
+      "impact": {
+        "window_end": "2026-09-22T10:05:00Z",
+        "window_start": "2026-09-22T10:00:00Z",
+        "cohort_complete": true,
+        "unique_payments": 5,
+        "customer_visible": true,
+        "affected_payments": 3,
+        "critical_merchant": false
+      },
+      "status": "investigating",
+      "revision": 1,
+      "scenario": "queue-delay",
+      "created_at": "2026-09-22T23:21:37.881145Z",
+      "updated_at": "2026-09-22T23:21:37.881145Z",
+      "original_cohort": [
+        "p1",
+        "p2",
+        "p3"
+      ]
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "event_received",
+    "data": {
+      "id": "391f4e68-50c1-4e0a-b621-0daccbe1a4c8",
+      "kind": "grafana.alert.firing",
+      "source": "grafana",
+      "payload": {
+        "text": "Completed payments but merchant orders remain stale. Investigate callback delivery."
+      },
+      "external_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54:alert-1",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "occurred_at": "2026-09-22T10:00:00Z",
+      "available_at": "2026-09-22T10:05:00Z"
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "evidence",
+    "data": {
+      "id": "E001",
+      "data": {
+        "impact": {
+          "window_end": "2026-09-22T10:05:00Z",
+          "window_start": "2026-09-22T10:00:00Z",
+          "cohort_complete": true,
+          "unique_payments": 5,
+          "customer_visible": true,
+          "affected_payments": 3,
+          "critical_merchant": false
+        },
+        "original_cohort": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "payment_summary": {
+          "failed": 1,
+          "pending": 1,
+          "unknown": 0,
+          "completed": 3,
+          "payment_ids": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5"
+          ],
+          "data_complete": true,
+          "completed_payment_ids": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "total_unique_payments": 5
+        },
+        "callback_confirmations_complete": true
+      },
+      "kind": "base_facts",
+      "claims": null,
+      "run_id": "680574d0-2887-4346-a65e-e8f8016c17c0",
+      "source": "payments",
+      "summary": "5 unique payments; 3 completed payments missing confirmed callbacks (potential impact)",
+      "event_id": "00000000-0000-0000-0000-000000000000",
+      "available": true,
+      "window_end": "2026-09-22T10:05:00Z",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "observed_at": "2026-09-22T10:05:00Z",
+      "window_start": "2026-09-22T10:00:00Z"
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "evidence",
+    "data": {
+      "id": "E002",
+      "data": {
+        "text": "Completed payments but merchant orders remain stale. Investigate callback delivery."
+      },
+      "kind": "grafana.alert.firing",
+      "claims": null,
+      "run_id": "680574d0-2887-4346-a65e-e8f8016c17c0",
+      "source": "event",
+      "summary": "Untrusted source event: grafana.alert.firing",
+      "event_id": "391f4e68-50c1-4e0a-b621-0daccbe1a4c8",
+      "available": true,
+      "window_end": "0001-01-01T00:00:00Z",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "observed_at": "2026-09-22T12:00:00+02:00",
+      "window_start": "0001-01-01T00:00:00Z"
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "model_turn",
+    "data": {
+      "step": 1,
+      "turn": {
+        "kind": "tool_call",
+        "tool_call": {
+          "name": "get_callback_attempts",
+          "arguments": {
+            "payment_ids": [
+              "p1",
+              "p2",
+              "p3"
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "status": "open",
+            "statement": "Callback attempts may be absent for affected payments.",
+            "missing_evidence": [
+              "Callback attempt records for the original completed-payment cohort."
+            ],
+            "supporting_evidence": [],
+            "contradicting_evidence": []
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q1",
+            "question": "What callback attempts were recorded for p1, p2, and p3?",
+            "why_it_matters": "Distinguishes no dispatch/attempts from dispatch failures or successful delivery with missing merchant confirmation."
+          }
+        ]
+      },
+      "metadata": {
+        "model": "gpt-6-luna",
+        "attempts": 1,
+        "duration_ms": 4904,
+        "response_id": "resp_0a77e10034232b45016ab30d82de6487d2ade4099360898dc6",
+        "input_tokens": 2623,
+        "cached_tokens": 0,
+        "output_tokens": 260,
+        "reasoning_effort": "high"
+      }
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "evidence",
+    "data": {
+      "id": "E003",
+      "data": {
+        "data_complete": true,
+        "with_attempts": 0,
+        "payments_checked": 3,
+        "source_available": true,
+        "http_status_counts": {},
+        "new_traffic_checked": 0,
+        "new_traffic_successful": 0,
+        "acknowledged_payment_ids": [],
+        "with_successful_delivery": 0
+      },
+      "kind": "get_callback_attempts",
+      "claims": [
+        "callback_attempts_missing"
+      ],
+      "run_id": "680574d0-2887-4346-a65e-e8f8016c17c0",
+      "source": "callbacks",
+      "summary": "3 unique payments checked; 0 with attempts, 0 acknowledged; complete=true",
+      "event_id": "00000000-0000-0000-0000-000000000000",
+      "available": true,
+      "window_end": "2026-09-22T10:05:00Z",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "observed_at": "2026-09-22T10:05:00Z",
+      "window_start": "2026-09-22T10:00:00Z"
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "tool_run",
+    "data": {
+      "id": "c0565543-cb79-48ed-a4a9-362c6da807c2",
+      "name": "get_callback_attempts",
+      "step": 1,
+      "run_id": "680574d0-2887-4346-a65e-e8f8016c17c0",
+      "status": "succeeded",
+      "arguments": {
+        "payment_ids": [
+          "p1",
+          "p2",
+          "p3"
+        ]
+      },
+      "started_at": "2026-09-22T23:21:42.820884Z",
+      "finished_at": "2026-09-22T23:21:42.821082Z",
+      "evidence_ref": "E003"
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "model_turn",
+    "data": {
+      "step": 2,
+      "turn": {
+        "kind": "tool_call",
+        "tool_call": {
+          "name": "get_queue_health",
+          "arguments": {}
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "status": "supported",
+            "statement": "Callback attempts may be absent for affected payments.",
+            "missing_evidence": [],
+            "supporting_evidence": [
+              "E003"
+            ],
+            "contradicting_evidence": []
+          },
+          {
+            "id": "H2",
+            "status": "open",
+            "statement": "A degraded callback pre-dispatch queue may explain the missing attempts.",
+            "missing_evidence": [
+              "Current pre-dispatch queue health observations for the incident window."
+            ],
+            "supporting_evidence": [],
+            "contradicting_evidence": []
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q1",
+            "question": "Was the callback pre-dispatch queue healthy during the incident window?",
+            "why_it_matters": "A queue degradation could localize missing callback attempts to the callback platform before provider dispatch."
+          }
+        ]
+      },
+      "metadata": {
+        "model": "gpt-6-luna",
+        "attempts": 1,
+        "duration_ms": 3989,
+        "response_id": "resp_0b726a077eebbed9016ab30d86fa4487d289ef1017b6261bac",
+        "input_tokens": 3085,
+        "cached_tokens": 1844,
+        "output_tokens": 254,
+        "reasoning_effort": "high"
+      }
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "evidence",
+    "data": {
+      "id": "E004",
+      "data": {
+        "degraded": true,
+        "queue_depth": 845,
+        "data_complete": true,
+        "worker_status": "degraded",
+        "oldest_job_age_seconds": 1080
+      },
+      "kind": "get_queue_health",
+      "claims": [
+        "queue_degraded"
+      ],
+      "run_id": "680574d0-2887-4346-a65e-e8f8016c17c0",
+      "source": "queue",
+      "summary": "Queue depth=845, oldest=1080s, worker=degraded; complete=true",
+      "event_id": "00000000-0000-0000-0000-000000000000",
+      "available": true,
+      "window_end": "2026-09-22T10:05:00Z",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "observed_at": "2026-09-22T10:05:00Z",
+      "window_start": "2026-09-22T10:00:00Z"
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "tool_run",
+    "data": {
+      "id": "6ec92c74-aabb-480a-9cbb-2fa1c669e516",
+      "name": "get_queue_health",
+      "step": 2,
+      "run_id": "680574d0-2887-4346-a65e-e8f8016c17c0",
+      "status": "succeeded",
+      "arguments": {},
+      "started_at": "2026-09-22T23:21:46.82411Z",
+      "finished_at": "2026-09-22T23:21:46.824194Z",
+      "evidence_ref": "E004"
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "model_turn",
+    "data": {
+      "step": 3,
+      "turn": {
+        "kind": "tool_call",
+        "tool_call": {
+          "name": "get_provider_status",
+          "arguments": {}
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "status": "supported",
+            "statement": "Callback attempts are absent for the three affected payments.",
+            "missing_evidence": [],
+            "supporting_evidence": [
+              "E003"
+            ],
+            "contradicting_evidence": []
+          },
+          {
+            "id": "H2",
+            "status": "supported",
+            "statement": "Degraded pre-dispatch queue conditions may explain the missing callback attempts.",
+            "missing_evidence": [],
+            "supporting_evidence": [
+              "E003",
+              "E004"
+            ],
+            "contradicting_evidence": []
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q1",
+            "question": "Does provider status show a current provider-side issue, or only stale status?",
+            "why_it_matters": "This helps distinguish callback queue dispatch failure from provider-side delivery conditions."
+          }
+        ]
+      },
+      "metadata": {
+        "model": "gpt-6-luna",
+        "attempts": 1,
+        "duration_ms": 5490,
+        "response_id": "resp_0417a2477fc786d4016ab30d8afd0087d283008336b5be8eb6",
+        "input_tokens": 3450,
+        "cached_tokens": 1844,
+        "output_tokens": 410,
+        "reasoning_effort": "high"
+      }
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "evidence",
+    "data": {
+      "id": "E005",
+      "data": {
+        "status": "operational",
+        "component": "demo_apm",
+        "published_at": "2026-09-22T09:40:00Z",
+        "untrusted_text": "All systems operational (older publication).",
+        "source_available": true,
+        "fresh_for_incident_window": false
+      },
+      "kind": "get_provider_status",
+      "claims": [
+        "provider_status_stale"
+      ],
+      "run_id": "680574d0-2887-4346-a65e-e8f8016c17c0",
+      "source": "provider",
+      "summary": "Provider status=operational; fresh for incident=false",
+      "event_id": "00000000-0000-0000-0000-000000000000",
+      "available": true,
+      "window_end": "2026-09-22T10:05:00Z",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "observed_at": "2026-09-22T10:05:00Z",
+      "window_start": "2026-09-22T10:00:00Z"
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "tool_run",
+    "data": {
+      "id": "11e45179-3254-4e84-83e4-9ba43e211b7c",
+      "name": "get_provider_status",
+      "step": 3,
+      "run_id": "680574d0-2887-4346-a65e-e8f8016c17c0",
+      "status": "succeeded",
+      "arguments": {},
+      "started_at": "2026-09-22T23:21:52.327491Z",
+      "finished_at": "2026-09-22T23:21:52.327598Z",
+      "evidence_ref": "E005"
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "model_turn",
+    "data": {
+      "step": 4,
+      "turn": {
+        "kind": "final",
+        "final": {
+          "claims": [
+            "callback_attempts_missing",
+            "queue_degraded",
+            "provider_status_stale"
+          ],
+          "summary": "Three completed payments are missing confirmed callbacks (E001). No callback attempts were recorded for the affected payments, and the pre-dispatch queue worker was degraded (E003, E004), localizing the customer-visible issue to callback platform. Escalate to callback platform for human review; the underlying cause remains unconfirmed. Provider status is stale (E005).",
+          "hypotheses": [
+            {
+              "id": "H1",
+              "status": "supported",
+              "statement": "Callback attempts are absent for the three affected payments.",
+              "missing_evidence": [],
+              "supporting_evidence": [
+                "E003"
+              ],
+              "contradicting_evidence": []
+            },
+            {
+              "id": "H2",
+              "status": "supported",
+              "statement": "Degraded pre-dispatch queue conditions are a plausible explanation for the missing callback attempts, but causation is unconfirmed.",
+              "missing_evidence": [
+                "Worker diagnostics identifying why the queue is degraded and whether the condition caused the missing attempts."
+              ],
+              "supporting_evidence": [
+                "E003",
+                "E004"
+              ],
+              "contradicting_evidence": []
+            }
+          ],
+          "evidence_ids": [
+            "E001",
+            "E003",
+            "E004",
+            "E005"
+          ],
+          "executed_tools": [
+            "get_callback_attempts",
+            "get_queue_health",
+            "get_provider_status"
+          ],
+          "failure_domain": "Callback platform pre-dispatch: all three affected payments had no callback attempts, while the queue worker was degraded. The underlying cause is not confirmed (E003, E004).",
+          "open_questions": [
+            {
+              "id": "Q2",
+              "question": "What caused the queue worker to degrade, and has it recovered?",
+              "why_it_matters": "This is needed to confirm the underlying cause and assess whether callback dispatch is recovering."
+            },
+            {
+              "id": "Q3",
+              "question": "What is the provider's current status?",
+              "why_it_matters": "The available provider status is stale and does not establish current provider health (E005)."
+            }
+          ],
+          "recommended_owner": "callback_platform",
+          "root_cause_status": "localized",
+          "recommended_action": "escalate_internal"
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "status": "supported",
+            "statement": "Callback attempts are absent for the three affected payments.",
+            "missing_evidence": [],
+            "supporting_evidence": [
+              "E003"
+            ],
+            "contradicting_evidence": []
+          },
+          {
+            "id": "H2",
+            "status": "supported",
+            "statement": "Degraded pre-dispatch queue conditions are a plausible explanation for the missing callback attempts, but causation is unconfirmed.",
+            "missing_evidence": [
+              "Worker diagnostics identifying why the queue is degraded and whether the condition caused the missing attempts."
+            ],
+            "supporting_evidence": [
+              "E003",
+              "E004"
+            ],
+            "contradicting_evidence": []
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q2",
+            "question": "What caused the queue worker to degrade, and has it recovered?",
+            "why_it_matters": "This is needed to confirm the underlying cause and assess whether callback dispatch is recovering."
+          },
+          {
+            "id": "Q3",
+            "question": "What is the provider's current status?",
+            "why_it_matters": "The available provider status is stale and does not establish current provider health (E005)."
+          }
+        ]
+      },
+      "metadata": {
+        "model": "gpt-6-luna",
+        "attempts": 1,
+        "duration_ms": 14048,
+        "response_id": "resp_0558bdf95c3a4323016ab30d909d3487d28532ac3ce47d223e",
+        "input_tokens": 3784,
+        "cached_tokens": 1844,
+        "output_tokens": 1386,
+        "reasoning_effort": "high"
+      }
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "proposal_created",
+    "data": {
+      "id": "d3de0697-c6fe-457d-afc7-59900cec2867",
+      "body": "Incident: cea703c5-9d0c-4bca-a555-dccdb8e12c54 | revision: 2 | run: 680574d0-2887-4346-a65e-e8f8016c17c0\nScope: merchant_demo / demo_apm / sandbox\nWindow: 2026-09-22T10:00:00Z — 2026-09-22T10:05:00Z | as of: 2026-09-22T10:05:00Z\nImpact: 3 potentially affected / 5 unique payments; membership complete=true; severity=medium\nOwner: callback_platform | root cause: localized\nAssessment: Three completed payments are missing confirmed callbacks (E001). No callback attempts were recorded for the affected payments, and the pre-dispatch queue worker was degraded (E003, E004), localizing the customer-visible issue to callback platform. Escalate to callback platform for human review; the underlying cause remains unconfirmed. Provider status is stale (E005).\nHypothesis H1 (supported): Callback attempts are absent for the three affected payments. [support: E003; contradict: ]\nHypothesis H2 (supported): Degraded pre-dispatch queue conditions are a plausible explanation for the missing callback attempts, but causation is unconfirmed. [support: E003, E004; contradict: ]\nEvidence E001 | payments | observed 2026-09-22T10:05:00Z | usable=true | run 680574d0-2887-4346-a65e-e8f8016c17c0: 5 unique payments; 3 completed payments missing confirmed callbacks (potential impact)\nEvidence E003 | callbacks | observed 2026-09-22T10:05:00Z | usable=true | run 680574d0-2887-4346-a65e-e8f8016c17c0: 3 unique payments checked; 0 with attempts, 0 acknowledged; complete=true\nEvidence E004 | queue | observed 2026-09-22T10:05:00Z | usable=true | run 680574d0-2887-4346-a65e-e8f8016c17c0: Queue depth=845, oldest=1080s, worker=degraded; complete=true\nEvidence E005 | provider | observed 2026-09-22T10:05:00Z | usable=true | run 680574d0-2887-4346-a65e-e8f8016c17c0: Provider status=operational; fresh for incident=false\nNext check: What caused the queue worker to degrade, and has it recovered? — This is needed to confirm the underlying cause and assess whether callback dispatch is recovering.\nNext check: What is the provider's current status? — The available provider status is stale and does not establish current provider health (E005).\nClosure requires fresh callback acknowledgements for every original item and healthy new traffic, followed by human approval.",
+      "type": "escalation",
+      "owner": "callback_platform",
+      "title": "Investigate Callback platform pre-dispatch: all three affected payments had no callback attempts, while the queue worker was degraded. The underlying cause is not confirmed (E003, E004).",
+      "status": "pending",
+      "created_at": "2026-09-22T23:22:06.396128Z",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "incident_revision": 3
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "investigation_completed",
+    "data": {
+      "id": "680574d0-2887-4346-a65e-e8f8016c17c0",
+      "mode": "live",
+      "turns": [
+        {
+          "step": 1,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_callback_attempts",
+              "arguments": {
+                "payment_ids": [
+                  "p1",
+                  "p2",
+                  "p3"
+                ]
+              }
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "status": "open",
+                "statement": "Callback attempts may be absent for affected payments.",
+                "missing_evidence": [
+                  "Callback attempt records for the original completed-payment cohort."
+                ],
+                "supporting_evidence": [],
+                "contradicting_evidence": []
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q1",
+                "question": "What callback attempts were recorded for p1, p2, and p3?",
+                "why_it_matters": "Distinguishes no dispatch/attempts from dispatch failures or successful delivery with missing merchant confirmation."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "attempts": 1,
+            "duration_ms": 4904,
+            "response_id": "resp_0a77e10034232b45016ab30d82de6487d2ade4099360898dc6",
+            "input_tokens": 2623,
+            "cached_tokens": 0,
+            "output_tokens": 260,
+            "reasoning_effort": "high"
+          }
+        },
+        {
+          "step": 2,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_queue_health",
+              "arguments": {}
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "status": "supported",
+                "statement": "Callback attempts may be absent for affected payments.",
+                "missing_evidence": [],
+                "supporting_evidence": [
+                  "E003"
+                ],
+                "contradicting_evidence": []
+              },
+              {
+                "id": "H2",
+                "status": "open",
+                "statement": "A degraded callback pre-dispatch queue may explain the missing attempts.",
+                "missing_evidence": [
+                  "Current pre-dispatch queue health observations for the incident window."
+                ],
+                "supporting_evidence": [],
+                "contradicting_evidence": []
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q1",
+                "question": "Was the callback pre-dispatch queue healthy during the incident window?",
+                "why_it_matters": "A queue degradation could localize missing callback attempts to the callback platform before provider dispatch."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "attempts": 1,
+            "duration_ms": 3989,
+            "response_id": "resp_0b726a077eebbed9016ab30d86fa4487d289ef1017b6261bac",
+            "input_tokens": 3085,
+            "cached_tokens": 1844,
+            "output_tokens": 254,
+            "reasoning_effort": "high"
+          }
+        },
+        {
+          "step": 3,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_provider_status",
+              "arguments": {}
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "status": "supported",
+                "statement": "Callback attempts are absent for the three affected payments.",
+                "missing_evidence": [],
+                "supporting_evidence": [
+                  "E003"
+                ],
+                "contradicting_evidence": []
+              },
+              {
+                "id": "H2",
+                "status": "supported",
+                "statement": "Degraded pre-dispatch queue conditions may explain the missing callback attempts.",
+                "missing_evidence": [],
+                "supporting_evidence": [
+                  "E003",
+                  "E004"
+                ],
+                "contradicting_evidence": []
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q1",
+                "question": "Does provider status show a current provider-side issue, or only stale status?",
+                "why_it_matters": "This helps distinguish callback queue dispatch failure from provider-side delivery conditions."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "attempts": 1,
+            "duration_ms": 5490,
+            "response_id": "resp_0417a2477fc786d4016ab30d8afd0087d283008336b5be8eb6",
+            "input_tokens": 3450,
+            "cached_tokens": 1844,
+            "output_tokens": 410,
+            "reasoning_effort": "high"
+          }
+        },
+        {
+          "step": 4,
+          "turn": {
+            "kind": "final",
+            "final": {
+              "claims": [
+                "callback_attempts_missing",
+                "queue_degraded",
+                "provider_status_stale"
+              ],
+              "summary": "Three completed payments are missing confirmed callbacks (E001). No callback attempts were recorded for the affected payments, and the pre-dispatch queue worker was degraded (E003, E004), localizing the customer-visible issue to callback platform. Escalate to callback platform for human review; the underlying cause remains unconfirmed. Provider status is stale (E005).",
+              "hypotheses": [
+                {
+                  "id": "H1",
+                  "status": "supported",
+                  "statement": "Callback attempts are absent for the three affected payments.",
+                  "missing_evidence": [],
+                  "supporting_evidence": [
+                    "E003"
+                  ],
+                  "contradicting_evidence": []
+                },
+                {
+                  "id": "H2",
+                  "status": "supported",
+                  "statement": "Degraded pre-dispatch queue conditions are a plausible explanation for the missing callback attempts, but causation is unconfirmed.",
+                  "missing_evidence": [
+                    "Worker diagnostics identifying why the queue is degraded and whether the condition caused the missing attempts."
+                  ],
+                  "supporting_evidence": [
+                    "E003",
+                    "E004"
+                  ],
+                  "contradicting_evidence": []
+                }
+              ],
+              "evidence_ids": [
+                "E001",
+                "E003",
+                "E004",
+                "E005"
+              ],
+              "executed_tools": [
+                "get_callback_attempts",
+                "get_queue_health",
+                "get_provider_status"
+              ],
+              "failure_domain": "Callback platform pre-dispatch: all three affected payments had no callback attempts, while the queue worker was degraded. The underlying cause is not confirmed (E003, E004).",
+              "open_questions": [
+                {
+                  "id": "Q2",
+                  "question": "What caused the queue worker to degrade, and has it recovered?",
+                  "why_it_matters": "This is needed to confirm the underlying cause and assess whether callback dispatch is recovering."
+                },
+                {
+                  "id": "Q3",
+                  "question": "What is the provider's current status?",
+                  "why_it_matters": "The available provider status is stale and does not establish current provider health (E005)."
+                }
+              ],
+              "recommended_owner": "callback_platform",
+              "root_cause_status": "localized",
+              "recommended_action": "escalate_internal"
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "status": "supported",
+                "statement": "Callback attempts are absent for the three affected payments.",
+                "missing_evidence": [],
+                "supporting_evidence": [
+                  "E003"
+                ],
+                "contradicting_evidence": []
+              },
+              {
+                "id": "H2",
+                "status": "supported",
+                "statement": "Degraded pre-dispatch queue conditions are a plausible explanation for the missing callback attempts, but causation is unconfirmed.",
+                "missing_evidence": [
+                  "Worker diagnostics identifying why the queue is degraded and whether the condition caused the missing attempts."
+                ],
+                "supporting_evidence": [
+                  "E003",
+                  "E004"
+                ],
+                "contradicting_evidence": []
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q2",
+                "question": "What caused the queue worker to degrade, and has it recovered?",
+                "why_it_matters": "This is needed to confirm the underlying cause and assess whether callback dispatch is recovering."
+              },
+              {
+                "id": "Q3",
+                "question": "What is the provider's current status?",
+                "why_it_matters": "The available provider status is stale and does not establish current provider health (E005)."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "attempts": 1,
+            "duration_ms": 14048,
+            "response_id": "resp_0558bdf95c3a4323016ab30d909d3487d28532ac3ce47d223e",
+            "input_tokens": 3784,
+            "cached_tokens": 1844,
+            "output_tokens": 1386,
+            "reasoning_effort": "high"
+          }
+        }
+      ],
+      "memory": [],
+      "result": {
+        "claims": [
+          "callback_attempts_missing",
+          "queue_degraded",
+          "provider_status_stale"
+        ],
+        "summary": "Three completed payments are missing confirmed callbacks (E001). No callback attempts were recorded for the affected payments, and the pre-dispatch queue worker was degraded (E003, E004), localizing the customer-visible issue to callback platform. Escalate to callback platform for human review; the underlying cause remains unconfirmed. Provider status is stale (E005).",
+        "hypotheses": [
+          {
+            "id": "H1",
+            "status": "supported",
+            "statement": "Callback attempts are absent for the three affected payments.",
+            "missing_evidence": [],
+            "supporting_evidence": [
+              "E003"
+            ],
+            "contradicting_evidence": []
+          },
+          {
+            "id": "H2",
+            "status": "supported",
+            "statement": "Degraded pre-dispatch queue conditions are a plausible explanation for the missing callback attempts, but causation is unconfirmed.",
+            "missing_evidence": [
+              "Worker diagnostics identifying why the queue is degraded and whether the condition caused the missing attempts."
+            ],
+            "supporting_evidence": [
+              "E003",
+              "E004"
+            ],
+            "contradicting_evidence": []
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E003",
+          "E004",
+          "E005"
+        ],
+        "executed_tools": [
+          "get_callback_attempts",
+          "get_queue_health",
+          "get_provider_status"
+        ],
+        "failure_domain": "Callback platform pre-dispatch: all three affected payments had no callback attempts, while the queue worker was degraded. The underlying cause is not confirmed (E003, E004).",
+        "open_questions": [
+          {
+            "id": "Q2",
+            "question": "What caused the queue worker to degrade, and has it recovered?",
+            "why_it_matters": "This is needed to confirm the underlying cause and assess whether callback dispatch is recovering."
+          },
+          {
+            "id": "Q3",
+            "question": "What is the provider's current status?",
+            "why_it_matters": "The available provider status is stale and does not establish current provider health (E005)."
+          }
+        ],
+        "recommended_owner": "callback_platform",
+        "root_cause_status": "localized",
+        "recommended_action": "escalate_internal"
+      },
+      "status": "completed",
+      "context": {
+        "as_of": "2026-09-22T10:05:00Z",
+        "scope": {
+          "method": "demo_apm",
+          "window_end": "2026-09-22T10:05:00Z",
+          "environment": "sandbox",
+          "merchant_id": "merchant_demo",
+          "window_start": "2026-09-22T10:00:00Z"
+        },
+        "impact": {
+          "window_end": "2026-09-22T10:05:00Z",
+          "window_start": "2026-09-22T10:00:00Z",
+          "cohort_complete": true,
+          "unique_payments": 5,
+          "customer_visible": true,
+          "affected_payments": 3,
+          "critical_merchant": false
+        },
+        "evidence": [],
+        "hypotheses": [],
+        "tool_history": [],
+        "open_questions": [],
+        "original_cohort": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "previous_run_id": "00000000-0000-0000-0000-000000000000"
+      },
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "base_revision": 2
+    }
+  },
+  {
+    "at": "2026-09-22T12:05:00+02:00",
+    "kind": "proposal_approved",
+    "data": {
+      "id": "d3de0697-c6fe-457d-afc7-59900cec2867",
+      "body": "Incident: cea703c5-9d0c-4bca-a555-dccdb8e12c54 | revision: 2 | run: 680574d0-2887-4346-a65e-e8f8016c17c0\nScope: merchant_demo / demo_apm / sandbox\nWindow: 2026-09-22T10:00:00Z — 2026-09-22T10:05:00Z | as of: 2026-09-22T10:05:00Z\nImpact: 3 potentially affected / 5 unique payments; membership complete=true; severity=medium\nOwner: callback_platform | root cause: localized\nAssessment: Three completed payments are missing confirmed callbacks (E001). No callback attempts were recorded for the affected payments, and the pre-dispatch queue worker was degraded (E003, E004), localizing the customer-visible issue to callback platform. Escalate to callback platform for human review; the underlying cause remains unconfirmed. Provider status is stale (E005).\nHypothesis H1 (supported): Callback attempts are absent for the three affected payments. [support: E003; contradict: ]\nHypothesis H2 (supported): Degraded pre-dispatch queue conditions are a plausible explanation for the missing callback attempts, but causation is unconfirmed. [support: E003, E004; contradict: ]\nEvidence E001 | payments | observed 2026-09-22T10:05:00Z | usable=true | run 680574d0-2887-4346-a65e-e8f8016c17c0: 5 unique payments; 3 completed payments missing confirmed callbacks (potential impact)\nEvidence E003 | callbacks | observed 2026-09-22T10:05:00Z | usable=true | run 680574d0-2887-4346-a65e-e8f8016c17c0: 3 unique payments checked; 0 with attempts, 0 acknowledged; complete=true\nEvidence E004 | queue | observed 2026-09-22T10:05:00Z | usable=true | run 680574d0-2887-4346-a65e-e8f8016c17c0: Queue depth=845, oldest=1080s, worker=degraded; complete=true\nEvidence E005 | provider | observed 2026-09-22T10:05:00Z | usable=true | run 680574d0-2887-4346-a65e-e8f8016c17c0: Provider status=operational; fresh for incident=false\nNext check: What caused the queue worker to degrade, and has it recovered? — This is needed to confirm the underlying cause and assess whether callback dispatch is recovering.\nNext check: What is the provider's current status? — The available provider status is stale and does not establish current provider health (E005).\nClosure requires fresh callback acknowledgements for every original item and healthy new traffic, followed by human approval.",
+      "type": "escalation",
+      "owner": "callback_platform",
+      "title": "Investigate Callback platform pre-dispatch: all three affected payments had no callback attempts, while the queue worker was degraded. The underlying cause is not confirmed (E003, E004).",
+      "status": "approved",
+      "created_at": "2026-09-23T01:22:06.396128+02:00",
+      "decided_at": "2026-09-22T23:22:06.415081Z",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "decision_note": "Synthetic evaluator human-approval fixture",
+      "incident_revision": 3
+    }
+  },
+  {
+    "at": "2026-09-22T12:17:00+02:00",
+    "kind": "event_received",
+    "data": {
+      "id": "3f7ee41e-5e48-4d9c-86ea-7e325e8faac3",
+      "kind": "grafana.alert.resolved",
+      "source": "grafana",
+      "payload": {
+        "text": "Service alert resolved; verify original impact."
+      },
+      "external_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54:alert-1-resolved",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "occurred_at": "2026-09-22T10:17:00Z",
+      "available_at": "2026-09-22T10:17:00Z"
+    }
+  },
+  {
+    "at": "2026-09-22T12:17:00+02:00",
+    "kind": "recovery_evidence",
+    "data": {
+      "scope": {
+        "method": "demo_apm",
+        "window_end": "2026-09-22T10:05:00Z",
+        "environment": "sandbox",
+        "merchant_id": "merchant_demo",
+        "window_start": "2026-09-22T10:00:00Z"
+      },
+      "callbacks": {
+        "data_complete": true,
+        "with_attempts": 2,
+        "payments_checked": 3,
+        "source_available": true,
+        "http_status_counts": {
+          "200": 2
+        },
+        "new_traffic_checked": 20,
+        "new_traffic_successful": 20,
+        "acknowledged_payment_ids": [
+          "p1",
+          "p2"
+        ],
+        "with_successful_delivery": 2
+      },
+      "observed_at": "2026-09-22T10:17:00Z",
+      "available_at": "2026-09-22T10:17:00Z",
+      "original_cohort": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "original_cohort_complete": true
+    }
+  },
+  {
+    "at": "2026-09-22T12:17:00+02:00",
+    "kind": "recovery_check",
+    "data": {
+      "closure_allowed": false,
+      "new_traffic_healthy": "pass",
+      "original_cohort_recovered": "fail",
+      "unresolved_original_items": 1
+    }
+  },
+  {
+    "at": "2026-09-22T12:26:00+02:00",
+    "kind": "event_received",
+    "data": {
+      "id": "40338d66-98a7-4ac9-990d-f242a1a5554e",
+      "kind": "manual.note",
+      "source": "manual",
+      "payload": {
+        "text": "Fresh callback recovery telemetry is now available.",
+        "purpose": "recovery_check"
+      },
+      "external_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54:check-2",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "occurred_at": "2026-09-22T10:26:00Z",
+      "available_at": "2026-09-22T10:26:00Z"
+    }
+  },
+  {
+    "at": "2026-09-22T12:26:00+02:00",
+    "kind": "recovery_evidence",
+    "data": {
+      "scope": {
+        "method": "demo_apm",
+        "window_end": "2026-09-22T10:05:00Z",
+        "environment": "sandbox",
+        "merchant_id": "merchant_demo",
+        "window_start": "2026-09-22T10:00:00Z"
+      },
+      "callbacks": {
+        "data_complete": true,
+        "with_attempts": 3,
+        "payments_checked": 3,
+        "source_available": true,
+        "http_status_counts": {
+          "200": 3
+        },
+        "new_traffic_checked": 20,
+        "new_traffic_successful": 20,
+        "acknowledged_payment_ids": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "with_successful_delivery": 3
+      },
+      "observed_at": "2026-09-22T10:26:00Z",
+      "available_at": "2026-09-22T10:26:00Z",
+      "original_cohort": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "original_cohort_complete": true
+    }
+  },
+  {
+    "at": "2026-09-22T12:26:00+02:00",
+    "kind": "recovery_check",
+    "data": {
+      "closure_allowed": true,
+      "new_traffic_healthy": "pass",
+      "original_cohort_recovered": "pass",
+      "unresolved_original_items": 0
+    }
+  },
+  {
+    "at": "2026-09-22T12:26:00+02:00",
+    "kind": "proposal_created",
+    "data": {
+      "id": "387a27a5-e883-458e-b02b-31daeaa4ba22",
+      "body": "{\"new_traffic_healthy\":\"pass\",\"original_cohort_recovered\":\"pass\",\"unresolved_original_items\":0,\"closure_allowed\":true}",
+      "type": "closure",
+      "owner": "tech_ops",
+      "title": "Original impact recovered",
+      "status": "pending",
+      "created_at": "2026-09-22T23:22:06.424639Z",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "incident_revision": 8
+    }
+  },
+  {
+    "at": "2026-09-22T12:26:00+02:00",
+    "kind": "proposal_approved",
+    "data": {
+      "id": "387a27a5-e883-458e-b02b-31daeaa4ba22",
+      "body": "{\"new_traffic_healthy\":\"pass\",\"original_cohort_recovered\":\"pass\",\"unresolved_original_items\":0,\"closure_allowed\":true}",
+      "type": "closure",
+      "owner": "tech_ops",
+      "title": "Original impact recovered",
+      "status": "approved",
+      "created_at": "2026-09-23T01:22:06.424639+02:00",
+      "decided_at": "2026-09-22T23:22:06.426886Z",
+      "incident_id": "cea703c5-9d0c-4bca-a555-dccdb8e12c54",
+      "decision_note": "Synthetic evaluator closure approval",
+      "incident_revision": 8
+    }
+  }
+]

@@ -1,0 +1,161 @@
+[
+  {
+    "at": "2026-09-22T10:05:00Z",
+    "turns": [
+      {
+        "kind": "tool_call",
+        "tool_call": {
+          "name": "get_callback_attempts",
+          "arguments": {
+            "payment_ids": [
+              "p1",
+              "p2",
+              "p3"
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Receiver endpoint may reject callbacks",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          },
+          {
+            "id": "H2",
+            "statement": "Callbacks may be delayed before dispatch",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          }
+        ],
+        "open_questions": []
+      },
+      {
+        "kind": "tool_call",
+        "tool_call": {
+          "name": "get_queue_health",
+          "arguments": {}
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Merchant receiver returns HTTP 503",
+            "status": "supported",
+            "supporting_evidence": [
+              "@callbacks"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          },
+          {
+            "id": "H2",
+            "statement": "A pre-dispatch backlog is unlikely",
+            "status": "weakened",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [
+              "@callbacks"
+            ],
+            "missing_evidence": []
+          }
+        ],
+        "open_questions": []
+      },
+      {
+        "kind": "final",
+        "final": {
+          "summary": "Three completed payments have callback attempts returning HTTP 503. The queue is healthy; the observed failure is at the merchant receiver.",
+          "failure_domain": "merchant callback receiver",
+          "root_cause_status": "localized",
+          "hypotheses": [
+            {
+              "id": "H1",
+              "statement": "Merchant receiver returns HTTP 503",
+              "status": "supported",
+              "supporting_evidence": [
+                "@callbacks"
+              ],
+              "contradicting_evidence": [],
+              "missing_evidence": []
+            },
+            {
+              "id": "H2",
+              "statement": "A pre-dispatch backlog is unlikely",
+              "status": "weakened",
+              "supporting_evidence": [
+                "@base"
+              ],
+              "contradicting_evidence": [
+                "@callbacks",
+                "@queue"
+              ],
+              "missing_evidence": []
+            }
+          ],
+          "open_questions": [
+            {
+              "id": "Q1",
+              "question": "What causes the merchant receiver 503 responses?",
+              "why_it_matters": "Needed to distinguish the failure mechanism and verify recovery."
+            }
+          ],
+          "evidence_ids": [
+            "@callbacks",
+            "@queue"
+          ],
+          "executed_tools": [
+            "get_callback_attempts",
+            "get_queue_health"
+          ],
+          "recommended_owner": "merchant_integration",
+          "recommended_action": "escalate_internal",
+          "claims": [
+            "receiver_503_observed",
+            "queue_healthy"
+          ]
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Merchant receiver returns HTTP 503",
+            "status": "supported",
+            "supporting_evidence": [
+              "@callbacks"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          },
+          {
+            "id": "H2",
+            "statement": "A pre-dispatch backlog is unlikely",
+            "status": "weakened",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [
+              "@callbacks",
+              "@queue"
+            ],
+            "missing_evidence": []
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q1",
+            "question": "What causes the merchant receiver 503 responses?",
+            "why_it_matters": "Needed to distinguish the failure mechanism and verify recovery."
+          }
+        ]
+      }
+    ]
+  }
+]

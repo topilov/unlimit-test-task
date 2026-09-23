@@ -1,0 +1,24 @@
+[
+  {
+    "memory_ids": [],
+    "scenario": "evolving-evidence",
+    "incident_id": "8cccae08-2c49-4ad1-806a-9ac8a71e10b1",
+    "passed": true,
+    "failures": [],
+    "warnings": [],
+    "required_tools": {
+      "get_callback_attempts": true,
+      "get_queue_health": true
+    },
+    "forbidden_claims": [],
+    "evaluation_scope": "structured_contracts_and_workflow",
+    "prose_evaluated": false,
+    "premature_closure_count": 0,
+    "tool_call_count": 6,
+    "model_call_count": 8,
+    "api_attempt_count": 8,
+    "latency_ms": 69688,
+    "input_tokens": 33426,
+    "output_tokens": 6031
+  }
+]

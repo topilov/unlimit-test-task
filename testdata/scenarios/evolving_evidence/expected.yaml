@@ -1,0 +1,53 @@
+{
+  "must_use_tools": [
+    "get_callback_attempts"
+  ],
+  "should_use_tools": [
+    "get_queue_health"
+  ],
+  "must_discover": [
+    "callback_attempts_missing",
+    "queue_degraded"
+  ],
+  "must_not_claim": [
+    "receiver_failure_confirmed",
+    "provider_outage_confirmed",
+    "receiver_503_observed"
+  ],
+  "owner": "callback_platform",
+  "root_cause_status": "localized",
+  "action": "escalate_internal",
+  "initial_status": "awaiting_review",
+  "recovery": [
+    {
+      "at": "2026-09-22T10:17:00Z",
+      "closure_allowed": false
+    },
+    {
+      "at": "2026-09-22T10:26:00Z",
+      "closure_allowed": true
+    }
+  ],
+  "advance_before_approval": true,
+  "investigations": [
+    {
+      "at": "2026-09-22T10:06:00Z",
+      "must_use_tools": [
+        "get_callback_attempts",
+        "get_queue_health"
+      ],
+      "must_discover": [
+        "receiver_503_observed"
+      ],
+      "must_not_claim": [
+        "receiver_failure_confirmed",
+        "provider_outage_confirmed"
+      ],
+      "owner": "merchant_integration",
+      "root_cause_status": "localized",
+      "action": "escalate_internal",
+      "initial_status": "awaiting_review",
+      "min_revised_hypotheses": 2
+    }
+  ]
+}

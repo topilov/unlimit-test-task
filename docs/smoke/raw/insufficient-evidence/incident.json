@@ -1,0 +1,528 @@
+{
+  "incident": {
+    "id": "caaa8e92-5ff9-45c6-81b3-a4f72ac5b513",
+    "status": "manual_triage",
+    "revision": 3,
+    "scope": {
+      "merchant_id": "merchant_demo",
+      "method": "demo_apm",
+      "environment": "sandbox",
+      "window_start": "2026-09-22T10:00:00Z",
+      "window_end": "2026-09-22T10:05:00Z"
+    },
+    "scenario": "insufficient-evidence",
+    "clock": "2026-09-22T10:05:00Z",
+    "cursor": 1,
+    "impact": {
+      "cohort_complete": true,
+      "unique_payments": 5,
+      "affected_payments": 3,
+      "customer_visible": true,
+      "critical_merchant": false,
+      "window_start": "2026-09-22T10:00:00Z",
+      "window_end": "2026-09-22T10:05:00Z"
+    },
+    "original_cohort": [
+      "p1",
+      "p2",
+      "p3"
+    ],
+    "created_at": "2026-09-22T23:22:37.460261Z",
+    "updated_at": "2026-09-22T23:23:04.952526Z"
+  },
+  "runs": [
+    {
+      "context": {
+        "as_of": "2026-09-22T10:05:00Z",
+        "scope": {
+          "merchant_id": "merchant_demo",
+          "method": "demo_apm",
+          "environment": "sandbox",
+          "window_start": "2026-09-22T10:00:00Z",
+          "window_end": "2026-09-22T10:05:00Z"
+        },
+        "impact": {
+          "cohort_complete": true,
+          "unique_payments": 5,
+          "affected_payments": 3,
+          "customer_visible": true,
+          "critical_merchant": false,
+          "window_start": "2026-09-22T10:00:00Z",
+          "window_end": "2026-09-22T10:05:00Z"
+        },
+        "original_cohort": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "previous_run_id": "00000000-0000-0000-0000-000000000000",
+        "evidence": [],
+        "hypotheses": [],
+        "open_questions": [],
+        "tool_history": []
+      },
+      "id": "305451b8-3597-4e77-8e92-b5dbd7ae463c",
+      "incident_id": "caaa8e92-5ff9-45c6-81b3-a4f72ac5b513",
+      "base_revision": 2,
+      "mode": "live",
+      "status": "completed",
+      "result": {
+        "summary": "Three completed payments are missing confirmed callbacks (E001, E003). Callback attempts are unavailable from an incomplete source, queue health is incomplete, and provider status is stale (E004, E005, E006). These diagnostics do not localize the failure domain.",
+        "failure_domain": "Unknown. The callback source and queue health data are incomplete, and provider status is stale; the available evidence does not localize the failure domain.",
+        "root_cause_status": "unknown",
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Three completed payments lack confirmed merchant callbacks.",
+            "status": "supported",
+            "supporting_evidence": [
+              "E001",
+              "E003"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": [
+              "Complete merchant callback confirmations for each completed payment."
+            ]
+          },
+          {
+            "id": "H2",
+            "statement": "The callback delivery failure domain may be localized to attempt generation or downstream delivery.",
+            "status": "open",
+            "supporting_evidence": [],
+            "contradicting_evidence": [],
+            "missing_evidence": [
+              "Complete per-payment callback attempts and outcomes; the callback source is incomplete."
+            ]
+          },
+          {
+            "id": "H3",
+            "statement": "A provider-side issue may be contributing to the callback incident.",
+            "status": "open",
+            "supporting_evidence": [],
+            "contradicting_evidence": [],
+            "missing_evidence": [
+              "Current provider health and incident context."
+            ]
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q2",
+            "question": "What callback attempts and outcomes are recorded for p1, p2, and p3 from a complete source?",
+            "why_it_matters": "Distinguishes callback generation gaps from downstream delivery or receiver errors."
+          },
+          {
+            "id": "Q3",
+            "question": "Is the callback pre-dispatch queue healthy based on a complete health source?",
+            "why_it_matters": "Queue degradation could localize the failure domain to callback processing."
+          },
+          {
+            "id": "Q4",
+            "question": "What is the provider's current health and incident context for the incident window?",
+            "why_it_matters": "The available operational status is stale and cannot establish current provider health."
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E003",
+          "E004",
+          "E005",
+          "E006"
+        ],
+        "executed_tools": [
+          "get_payment_summary",
+          "get_callback_attempts",
+          "get_queue_health",
+          "get_provider_status"
+        ],
+        "recommended_owner": "tech_ops",
+        "recommended_action": "continue_investigation",
+        "claims": [
+          "callback_source_incomplete",
+          "provider_status_stale"
+        ]
+      },
+      "turns": [
+        {
+          "step": 1,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_payment_summary",
+              "arguments": {
+                "cohort": "incident"
+              }
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "statement": "Three completed payments lack confirmed merchant callbacks.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Authoritative completed-payment and callback-confirmation summary for the scoped incident window"
+                ]
+              },
+              {
+                "id": "H2",
+                "statement": "The callback delivery failure domain may be localized to attempt generation or downstream delivery.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Per-payment callback attempts, response codes, or an unavailable-source result"
+                ]
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q1",
+                "question": "What is the authoritative payment cohort and completion status in the incident window?",
+                "why_it_matters": "Avoids treating pending or failed payments as impacted."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "high",
+            "input_tokens": 2656,
+            "output_tokens": 184,
+            "cached_tokens": 1844,
+            "duration_ms": 2858,
+            "response_id": "resp_0c4efd072e712f11016ab30dbdab5487d293ae69219381501d",
+            "attempts": 1
+          }
+        },
+        {
+          "step": 2,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_callback_attempts",
+              "arguments": {
+                "payment_ids": [
+                  "p1",
+                  "p2",
+                  "p3"
+                ]
+              }
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "statement": "Three completed payments lack confirmed merchant callbacks.",
+                "status": "supported",
+                "supporting_evidence": [
+                  "E001",
+                  "E003"
+                ],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Authoritative callback confirmation status for each completed payment."
+                ]
+              },
+              {
+                "id": "H2",
+                "statement": "The callback delivery failure domain may be localized to attempt generation or downstream delivery.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Per-payment callback attempts and outcomes, including whether the callback source is complete."
+                ]
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q2",
+                "question": "What callback attempts and outcomes are recorded for p1, p2, and p3?",
+                "why_it_matters": "Distinguishes callback generation gaps from downstream delivery or receiver errors."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "high",
+            "input_tokens": 3166,
+            "output_tokens": 286,
+            "cached_tokens": 1844,
+            "duration_ms": 3784,
+            "response_id": "resp_092755990d1c8121016ab30dc0832487d29d645ac33b6182e4",
+            "attempts": 1
+          }
+        },
+        {
+          "step": 3,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_queue_health",
+              "arguments": {}
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "statement": "Three completed payments lack confirmed merchant callbacks.",
+                "status": "supported",
+                "supporting_evidence": [
+                  "E001",
+                  "E003"
+                ],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Authoritative callback confirmation status for each completed payment."
+                ]
+              },
+              {
+                "id": "H2",
+                "statement": "The callback delivery failure domain may be localized to attempt generation or downstream delivery.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Complete per-payment callback attempts and outcomes; the current callback source is incomplete."
+                ]
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q2",
+                "question": "What callback attempts and outcomes are recorded for p1, p2, and p3 from a complete source?",
+                "why_it_matters": "Distinguishes callback generation gaps from downstream delivery or receiver errors."
+              },
+              {
+                "id": "Q3",
+                "question": "Is the callback pre-dispatch queue healthy?",
+                "why_it_matters": "Queue degradation could localize the failure domain to callback processing."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "high",
+            "input_tokens": 3543,
+            "output_tokens": 386,
+            "cached_tokens": 1844,
+            "duration_ms": 6008,
+            "response_id": "resp_0832200bf6a39926016ab30dc44d1887d299b95d1fe12c16ae",
+            "attempts": 1
+          }
+        },
+        {
+          "step": 4,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_provider_status",
+              "arguments": {}
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "statement": "Three completed payments lack confirmed merchant callbacks.",
+                "status": "supported",
+                "supporting_evidence": [
+                  "E001",
+                  "E003"
+                ],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Complete merchant callback confirmations for each completed payment."
+                ]
+              },
+              {
+                "id": "H2",
+                "statement": "The callback delivery failure domain may be localized to attempt generation or downstream delivery.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Complete per-payment callback attempts and outcomes; the current callback source is incomplete."
+                ]
+              },
+              {
+                "id": "H3",
+                "statement": "A provider-side issue may be contributing to the callback incident.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Current provider health and incident context."
+                ]
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q2",
+                "question": "What callback attempts and outcomes are recorded for p1, p2, and p3 from a complete source?",
+                "why_it_matters": "Distinguishes callback generation gaps from downstream delivery or receiver errors."
+              },
+              {
+                "id": "Q3",
+                "question": "Is the callback pre-dispatch queue healthy based on a complete health source?",
+                "why_it_matters": "Queue degradation could localize the failure domain to callback processing."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "high",
+            "input_tokens": 3904,
+            "output_tokens": 433,
+            "cached_tokens": 1844,
+            "duration_ms": 3897,
+            "response_id": "resp_04b791bb787874d1016ab30dca4d9887d289c70c182349bbaf",
+            "attempts": 1
+          }
+        },
+        {
+          "step": 5,
+          "turn": {
+            "kind": "final",
+            "final": {
+              "summary": "Three completed payments are missing confirmed callbacks (E001, E003). Callback attempts are unavailable from an incomplete source, queue health is incomplete, and provider status is stale (E004, E005, E006). These diagnostics do not localize the failure domain.",
+              "failure_domain": "Unknown. The callback source and queue health data are incomplete, and provider status is stale; the available evidence does not localize the failure domain.",
+              "root_cause_status": "unknown",
+              "hypotheses": [
+                {
+                  "id": "H1",
+                  "statement": "Three completed payments lack confirmed merchant callbacks.",
+                  "status": "supported",
+                  "supporting_evidence": [
+                    "E001",
+                    "E003"
+                  ],
+                  "contradicting_evidence": [],
+                  "missing_evidence": [
+                    "Complete merchant callback confirmations for each completed payment."
+                  ]
+                },
+                {
+                  "id": "H2",
+                  "statement": "The callback delivery failure domain may be localized to attempt generation or downstream delivery.",
+                  "status": "open",
+                  "supporting_evidence": [],
+                  "contradicting_evidence": [],
+                  "missing_evidence": [
+                    "Complete per-payment callback attempts and outcomes; the callback source is incomplete."
+                  ]
+                },
+                {
+                  "id": "H3",
+                  "statement": "A provider-side issue may be contributing to the callback incident.",
+                  "status": "open",
+                  "supporting_evidence": [],
+                  "contradicting_evidence": [],
+                  "missing_evidence": [
+                    "Current provider health and incident context."
+                  ]
+                }
+              ],
+              "open_questions": [
+                {
+                  "id": "Q2",
+                  "question": "What callback attempts and outcomes are recorded for p1, p2, and p3 from a complete source?",
+                  "why_it_matters": "Distinguishes callback generation gaps from downstream delivery or receiver errors."
+                },
+                {
+                  "id": "Q3",
+                  "question": "Is the callback pre-dispatch queue healthy based on a complete health source?",
+                  "why_it_matters": "Queue degradation could localize the failure domain to callback processing."
+                },
+                {
+                  "id": "Q4",
+                  "question": "What is the provider's current health and incident context for the incident window?",
+                  "why_it_matters": "The available operational status is stale and cannot establish current provider health."
+                }
+              ],
+              "evidence_ids": [
+                "E001",
+                "E003",
+                "E004",
+                "E005",
+                "E006"
+              ],
+              "executed_tools": [
+                "get_payment_summary",
+                "get_callback_attempts",
+                "get_queue_health",
+                "get_provider_status"
+              ],
+              "recommended_owner": "tech_ops",
+              "recommended_action": "continue_investigation",
+              "claims": [
+                "callback_source_incomplete",
+                "provider_status_stale"
+              ]
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "statement": "Three completed payments lack confirmed merchant callbacks.",
+                "status": "supported",
+                "supporting_evidence": [
+                  "E001",
+                  "E003"
+                ],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Complete merchant callback confirmations for each completed payment."
+                ]
+              },
+              {
+                "id": "H2",
+                "statement": "The callback delivery failure domain may be localized to attempt generation or downstream delivery.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Complete per-payment callback attempts and outcomes; the callback source is incomplete."
+                ]
+              },
+              {
+                "id": "H3",
+                "statement": "A provider-side issue may be contributing to the callback incident.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Current provider health and incident context."
+                ]
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q2",
+                "question": "What callback attempts and outcomes are recorded for p1, p2, and p3 from a complete source?",
+                "why_it_matters": "Distinguishes callback generation gaps from downstream delivery or receiver errors."
+              },
+              {
+                "id": "Q3",
+                "question": "Is the callback pre-dispatch queue healthy based on a complete health source?",
+                "why_it_matters": "Queue degradation could localize the failure domain to callback processing."
+              },
+              {
+                "id": "Q4",
+                "question": "What is the provider's current health and incident context for the incident window?",
+                "why_it_matters": "The available operational status is stale and cannot establish current provider health."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "high",
+            "input_tokens": 4301,
+            "output_tokens": 1128,
+            "cached_tokens": 1844,
+            "duration_ms": 10873,
+            "response_id": "resp_0253f2121c0b1ee0016ab30dce35e887d29691f77f875c7a97",
+            "attempts": 1
+          }
+        }
+      ],
+      "memory": []
+    }
+  ],
+  "proposals": []
+}

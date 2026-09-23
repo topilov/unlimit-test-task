@@ -1,0 +1,104 @@
+[
+  {
+    "scope": {
+      "merchant_id": "merchant_demo",
+      "method": "demo_apm",
+      "environment": "sandbox",
+      "window_start": "2026-09-22T10:00:00Z",
+      "window_end": "2026-09-22T10:05:00Z"
+    },
+    "available_at": "2026-09-22T10:05:00Z",
+    "observed_at": "2026-09-22T10:05:00Z",
+    "available": true,
+    "data_complete": true,
+    "payments": [
+      {
+        "id": "p1",
+        "status": "completed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p2",
+        "status": "completed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p3",
+        "status": "completed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p4",
+        "status": "pending",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p5",
+        "status": "failed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p1",
+        "status": "completed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      }
+    ]
+  },
+  {
+    "scope": {
+      "merchant_id": "merchant_demo",
+      "method": "demo_apm",
+      "environment": "sandbox",
+      "window_start": "2026-09-22T10:00:00Z",
+      "window_end": "2026-09-22T10:05:00Z"
+    },
+    "available_at": "2026-09-22T10:06:00Z",
+    "observed_at": "2026-09-22T10:06:00Z",
+    "available": true,
+    "data_complete": true,
+    "payments": [
+      {
+        "id": "p1",
+        "status": "completed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p2",
+        "status": "completed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p3",
+        "status": "completed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p4",
+        "status": "pending",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p5",
+        "status": "failed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      },
+      {
+        "id": "p1",
+        "status": "completed",
+        "updated_at": "2026-09-22T10:01:00Z",
+        "created_at": "2026-09-22T10:01:00Z"
+      }
+    ]
+  }
+]

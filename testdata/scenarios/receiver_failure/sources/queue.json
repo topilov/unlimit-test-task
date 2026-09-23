@@ -1,0 +1,50 @@
+[
+  {
+    "scope": {
+      "merchant_id": "merchant_demo",
+      "method": "demo_apm",
+      "environment": "sandbox",
+      "window_start": "2026-09-22T10:00:00Z",
+      "window_end": "2026-09-22T10:05:00Z"
+    },
+    "available_at": "2026-09-22T10:05:00Z",
+    "observed_at": "2026-09-22T10:05:00Z",
+    "available": true,
+    "data_complete": true,
+    "queue_depth": 0,
+    "oldest_job_age_seconds": 0,
+    "worker_status": "healthy"
+  },
+  {
+    "scope": {
+      "merchant_id": "merchant_demo",
+      "method": "demo_apm",
+      "environment": "sandbox",
+      "window_start": "2026-09-22T10:00:00Z",
+      "window_end": "2026-09-22T10:05:00Z"
+    },
+    "available_at": "2026-09-22T10:17:00Z",
+    "observed_at": "2026-09-22T10:17:00Z",
+    "available": true,
+    "data_complete": true,
+    "queue_depth": 0,
+    "oldest_job_age_seconds": 0,
+    "worker_status": "healthy"
+  },
+  {
+    "scope": {
+      "merchant_id": "merchant_demo",
+      "method": "demo_apm",
+      "environment": "sandbox",
+      "window_start": "2026-09-22T10:00:00Z",
+      "window_end": "2026-09-22T10:05:00Z"
+    },
+    "available_at": "2026-09-22T10:26:00Z",
+    "observed_at": "2026-09-22T10:26:00Z",
+    "available": true,
+    "data_complete": true,
+    "queue_depth": 0,
+    "oldest_job_age_seconds": 0,
+    "worker_status": "healthy"
+  }
+]

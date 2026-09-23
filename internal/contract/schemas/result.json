@@ -1,0 +1,63 @@
+{
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string"
+    },
+    "failure_domain": {
+      "type": "string"
+    },
+    "root_cause_status": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "localized",
+        "confirmed"
+      ]
+    },
+    "hypotheses": {
+      "$ref": "#/$defs/hypotheses"
+    },
+    "open_questions": {
+      "$ref": "#/$defs/open_questions"
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^E[0-9]+$"
+      }
+    },
+    "executed_tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_owner": {
+      "$ref": "#/$defs/owner"
+    },
+    "recommended_action": {
+      "$ref": "#/$defs/action"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    }
+  },
+  "required": [
+    "claims",
+    "evidence_ids",
+    "executed_tools",
+    "failure_domain",
+    "hypotheses",
+    "open_questions",
+    "recommended_action",
+    "recommended_owner",
+    "root_cause_status",
+    "summary"
+  ],
+  "additionalProperties": false
+}

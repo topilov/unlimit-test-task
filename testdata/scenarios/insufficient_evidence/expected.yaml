@@ -1,0 +1,21 @@
+{
+  "must_use_tools": [
+    "get_callback_attempts"
+  ],
+  "should_use_tools": [
+    "get_provider_status"
+  ],
+  "must_discover": [
+    "callback_source_incomplete",
+    "provider_status_stale"
+  ],
+  "must_not_claim": [
+    "receiver_failure_confirmed",
+    "provider_outage_confirmed"
+  ],
+  "owner": "tech_ops",
+  "root_cause_status": "unknown",
+  "action": "continue_investigation",
+  "initial_status": "manual_triage",
+  "recovery": []
+}

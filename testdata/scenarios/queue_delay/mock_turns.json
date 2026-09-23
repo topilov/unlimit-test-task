@@ -1,0 +1,161 @@
+[
+  {
+    "at": "2026-09-22T10:05:00Z",
+    "turns": [
+      {
+        "kind": "tool_call",
+        "tool_call": {
+          "name": "get_callback_attempts",
+          "arguments": {
+            "payment_ids": [
+              "p1",
+              "p2",
+              "p3"
+            ]
+          }
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Receiver endpoint may reject callbacks",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          },
+          {
+            "id": "H2",
+            "statement": "Callbacks may be delayed before dispatch",
+            "status": "open",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          }
+        ],
+        "open_questions": []
+      },
+      {
+        "kind": "tool_call",
+        "tool_call": {
+          "name": "get_queue_health",
+          "arguments": {}
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Receiver failure does not explain zero attempts",
+            "status": "weakened",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [
+              "@callbacks"
+            ],
+            "missing_evidence": []
+          },
+          {
+            "id": "H2",
+            "statement": "Delay occurs before callback dispatch",
+            "status": "supported",
+            "supporting_evidence": [
+              "@callbacks"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          }
+        ],
+        "open_questions": []
+      },
+      {
+        "kind": "final",
+        "final": {
+          "summary": "Three completed payments lack callbacks. No attempts were dispatched and the callback worker is degraded. Underlying worker failure is not established.",
+          "failure_domain": "callback pre-dispatch processing",
+          "root_cause_status": "localized",
+          "hypotheses": [
+            {
+              "id": "H1",
+              "statement": "Receiver failure does not explain zero attempts",
+              "status": "weakened",
+              "supporting_evidence": [
+                "@base"
+              ],
+              "contradicting_evidence": [
+                "@callbacks"
+              ],
+              "missing_evidence": []
+            },
+            {
+              "id": "H2",
+              "statement": "Delay occurs before callback dispatch",
+              "status": "supported",
+              "supporting_evidence": [
+                "@callbacks",
+                "@queue"
+              ],
+              "contradicting_evidence": [],
+              "missing_evidence": []
+            }
+          ],
+          "open_questions": [
+            {
+              "id": "Q1",
+              "question": "Why did the callback worker degrade?",
+              "why_it_matters": "Needed to distinguish the failure mechanism and verify recovery."
+            }
+          ],
+          "evidence_ids": [
+            "@callbacks",
+            "@queue"
+          ],
+          "executed_tools": [
+            "get_callback_attempts",
+            "get_queue_health"
+          ],
+          "recommended_owner": "callback_platform",
+          "recommended_action": "escalate_internal",
+          "claims": [
+            "callback_attempts_missing",
+            "queue_degraded"
+          ]
+        },
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Receiver failure does not explain zero attempts",
+            "status": "weakened",
+            "supporting_evidence": [
+              "@base"
+            ],
+            "contradicting_evidence": [
+              "@callbacks"
+            ],
+            "missing_evidence": []
+          },
+          {
+            "id": "H2",
+            "statement": "Delay occurs before callback dispatch",
+            "status": "supported",
+            "supporting_evidence": [
+              "@callbacks",
+              "@queue"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": []
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q1",
+            "question": "Why did the callback worker degrade?",
+            "why_it_matters": "Needed to distinguish the failure mechanism and verify recovery."
+          }
+        ]
+      }
+    ]
+  }
+]

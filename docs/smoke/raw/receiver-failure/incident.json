@@ -1,0 +1,474 @@
+{
+  "incident": {
+    "id": "6d8c1ca7-2169-4ffa-9e36-b862f954a06d",
+    "status": "closed",
+    "revision": 9,
+    "scope": {
+      "merchant_id": "merchant_demo",
+      "method": "demo_apm",
+      "environment": "sandbox",
+      "window_start": "2026-09-22T10:00:00Z",
+      "window_end": "2026-09-22T10:05:00Z"
+    },
+    "scenario": "receiver-failure",
+    "clock": "2026-09-22T10:26:00Z",
+    "cursor": 3,
+    "impact": {
+      "cohort_complete": true,
+      "unique_payments": 5,
+      "affected_payments": 3,
+      "customer_visible": true,
+      "critical_merchant": false,
+      "window_start": "2026-09-22T10:00:00Z",
+      "window_end": "2026-09-22T10:05:00Z"
+    },
+    "original_cohort": [
+      "p1",
+      "p2",
+      "p3"
+    ],
+    "created_at": "2026-09-22T23:22:06.475186Z",
+    "updated_at": "2026-09-22T23:22:37.413865Z"
+  },
+  "runs": [
+    {
+      "context": {
+        "as_of": "2026-09-22T10:05:00Z",
+        "scope": {
+          "merchant_id": "merchant_demo",
+          "method": "demo_apm",
+          "environment": "sandbox",
+          "window_start": "2026-09-22T10:00:00Z",
+          "window_end": "2026-09-22T10:05:00Z"
+        },
+        "impact": {
+          "cohort_complete": true,
+          "unique_payments": 5,
+          "affected_payments": 3,
+          "customer_visible": true,
+          "critical_merchant": false,
+          "window_start": "2026-09-22T10:00:00Z",
+          "window_end": "2026-09-22T10:05:00Z"
+        },
+        "original_cohort": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "previous_run_id": "00000000-0000-0000-0000-000000000000",
+        "evidence": [],
+        "hypotheses": [],
+        "open_questions": [],
+        "tool_history": []
+      },
+      "id": "a318d190-733f-4a24-9696-0fc0a0daaba0",
+      "incident_id": "6d8c1ca7-2169-4ffa-9e36-b862f954a06d",
+      "base_revision": 2,
+      "mode": "live",
+      "status": "completed",
+      "result": {
+        "summary": "Three completed payments are missing confirmed callbacks (E001). Attempts existed for all three, with four HTTP 503 responses and no acknowledgements (E003); the queue was healthy (E004). Escalate to merchant integration for human review of the receiver responses. The failure domain is localized, but the underlying cause is not confirmed; provider status is stale (E005).",
+        "failure_domain": "Callback receiver responses: attempts for all three affected payments received HTTP 503 responses and none were acknowledged (E003). The pre-dispatch queue was healthy (E004). This localizes the customer-visible failure domain to the receiver side, but does not establish why it returned 503; provider status is stale for this incident (E005).",
+        "root_cause_status": "localized",
+        "hypotheses": [
+          {
+            "id": "H1",
+            "statement": "Callback attempts may be absent or unavailable for the affected payments.",
+            "status": "rejected",
+            "supporting_evidence": [],
+            "contradicting_evidence": [
+              "E003"
+            ],
+            "missing_evidence": []
+          },
+          {
+            "id": "H2",
+            "statement": "The callback pre-dispatch queue may be degraded and preventing or delaying delivery.",
+            "status": "rejected",
+            "supporting_evidence": [],
+            "contradicting_evidence": [
+              "E004"
+            ],
+            "missing_evidence": []
+          },
+          {
+            "id": "H3",
+            "statement": "The customer-visible callback issue is associated with HTTP 503 responses and no acknowledgements for the cohort; the underlying source of those responses remains undetermined.",
+            "status": "supported",
+            "supporting_evidence": [
+              "E003"
+            ],
+            "contradicting_evidence": [],
+            "missing_evidence": [
+              "Current provider-side delivery context and receiver-side logs for the 503 responses."
+            ]
+          }
+        ],
+        "open_questions": [
+          {
+            "id": "Q1",
+            "question": "What current provider-side delivery context is available for the incident window?",
+            "why_it_matters": "The available provider status is stale and does not establish provider health during the incident."
+          },
+          {
+            "id": "Q2",
+            "question": "What do receiver-side logs show about the HTTP 503 responses?",
+            "why_it_matters": "They may identify why the receiver returned 503; the observed responses alone do not confirm the underlying cause."
+          }
+        ],
+        "evidence_ids": [
+          "E001",
+          "E003",
+          "E004",
+          "E005"
+        ],
+        "executed_tools": [
+          "get_callback_attempts",
+          "get_queue_health",
+          "get_provider_status"
+        ],
+        "recommended_owner": "merchant_integration",
+        "recommended_action": "escalate_internal",
+        "claims": [
+          "receiver_503_observed",
+          "queue_healthy",
+          "provider_status_stale"
+        ]
+      },
+      "turns": [
+        {
+          "step": 1,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_callback_attempts",
+              "arguments": {
+                "payment_ids": [
+                  "p1",
+                  "p2",
+                  "p3"
+                ]
+              }
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "statement": "Callback attempts may be absent or unavailable for the affected payments; current evidence does not establish a receiver failure.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Callback attempt records for the authoritative completed-payment cohort, including source completeness and receiver responses."
+                ]
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q1",
+                "question": "Are callback attempts recorded for p1, p2, and p3, and what receiver responses or source-completeness information are available?",
+                "why_it_matters": "Separates missing/incomplete callback telemetry from observed delivery attempts and receiver errors."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "high",
+            "input_tokens": 2624,
+            "output_tokens": 336,
+            "cached_tokens": 1844,
+            "duration_ms": 4164,
+            "response_id": "resp_059bc11fa88b8ef9016ab30d9ea46087d2a5a291daa8448040",
+            "attempts": 1
+          }
+        },
+        {
+          "step": 2,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_queue_health",
+              "arguments": {}
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "statement": "Callback attempts may be absent or unavailable for the affected payments; current evidence does not establish a receiver failure.",
+                "status": "rejected",
+                "supporting_evidence": [],
+                "contradicting_evidence": [
+                  "E003"
+                ],
+                "missing_evidence": []
+              },
+              {
+                "id": "H2",
+                "statement": "The callback pre-dispatch queue may be degraded and preventing or delaying delivery.",
+                "status": "open",
+                "supporting_evidence": [],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Current callback pre-dispatch queue health, including backlog and dispatch errors."
+                ]
+              },
+              {
+                "id": "H3",
+                "statement": "A receiver-side failure may be customer-visible, as callback attempts for the cohort returned HTTP 503 and none were acknowledged.",
+                "status": "supported",
+                "supporting_evidence": [
+                  "E003"
+                ],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Evidence distinguishing receiver-side 503 responses from provider-side delivery failure or another cause."
+                ]
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q1",
+                "question": "Is the pre-dispatch callback queue currently healthy, or is it degraded?",
+                "why_it_matters": "Distinguishes a local callback-platform queue problem from a failure further downstream."
+              },
+              {
+                "id": "Q2",
+                "question": "What current provider-side context is available for the delivery window?",
+                "why_it_matters": "Could distinguish receiver responses from provider-side delivery issues; stale status alone would not prove health."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "high",
+            "input_tokens": 3115,
+            "output_tokens": 463,
+            "cached_tokens": 1844,
+            "duration_ms": 5679,
+            "response_id": "resp_0ad6dd903b09135d016ab30da2cfe887d289ac5f0a3ad8ff17",
+            "attempts": 1
+          }
+        },
+        {
+          "step": 3,
+          "turn": {
+            "kind": "tool_call",
+            "tool_call": {
+              "name": "get_provider_status",
+              "arguments": {}
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "statement": "Callback attempts may be absent or unavailable for the affected payments; current evidence does not establish a receiver failure.",
+                "status": "rejected",
+                "supporting_evidence": [],
+                "contradicting_evidence": [
+                  "E003"
+                ],
+                "missing_evidence": []
+              },
+              {
+                "id": "H2",
+                "statement": "The callback pre-dispatch queue may be degraded and preventing or delaying delivery.",
+                "status": "rejected",
+                "supporting_evidence": [],
+                "contradicting_evidence": [
+                  "E004"
+                ],
+                "missing_evidence": []
+              },
+              {
+                "id": "H3",
+                "statement": "The customer-visible callback issue is associated with HTTP 503 responses and no acknowledgements for the cohort; the underlying source of those responses remains to be distinguished.",
+                "status": "supported",
+                "supporting_evidence": [
+                  "E003"
+                ],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Current provider-side context to distinguish receiver responses from provider-side delivery issues."
+                ]
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q1",
+                "question": "What current provider-side context is available for the delivery window?",
+                "why_it_matters": "Could distinguish receiver responses from provider-side delivery issues; stale status alone would not prove health."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "high",
+            "input_tokens": 3586,
+            "output_tokens": 389,
+            "cached_tokens": 1844,
+            "duration_ms": 4610,
+            "response_id": "resp_09e0d513adbaa021016ab30da8802c87d29f55acb45a3c1887",
+            "attempts": 1
+          }
+        },
+        {
+          "step": 4,
+          "turn": {
+            "kind": "final",
+            "final": {
+              "summary": "Three completed payments are missing confirmed callbacks (E001). Attempts existed for all three, with four HTTP 503 responses and no acknowledgements (E003); the queue was healthy (E004). Escalate to merchant integration for human review of the receiver responses. The failure domain is localized, but the underlying cause is not confirmed; provider status is stale (E005).",
+              "failure_domain": "Callback receiver responses: attempts for all three affected payments received HTTP 503 responses and none were acknowledged (E003). The pre-dispatch queue was healthy (E004). This localizes the customer-visible failure domain to the receiver side, but does not establish why it returned 503; provider status is stale for this incident (E005).",
+              "root_cause_status": "localized",
+              "hypotheses": [
+                {
+                  "id": "H1",
+                  "statement": "Callback attempts may be absent or unavailable for the affected payments.",
+                  "status": "rejected",
+                  "supporting_evidence": [],
+                  "contradicting_evidence": [
+                    "E003"
+                  ],
+                  "missing_evidence": []
+                },
+                {
+                  "id": "H2",
+                  "statement": "The callback pre-dispatch queue may be degraded and preventing or delaying delivery.",
+                  "status": "rejected",
+                  "supporting_evidence": [],
+                  "contradicting_evidence": [
+                    "E004"
+                  ],
+                  "missing_evidence": []
+                },
+                {
+                  "id": "H3",
+                  "statement": "The customer-visible callback issue is associated with HTTP 503 responses and no acknowledgements for the cohort; the underlying source of those responses remains undetermined.",
+                  "status": "supported",
+                  "supporting_evidence": [
+                    "E003"
+                  ],
+                  "contradicting_evidence": [],
+                  "missing_evidence": [
+                    "Current provider-side delivery context and receiver-side logs for the 503 responses."
+                  ]
+                }
+              ],
+              "open_questions": [
+                {
+                  "id": "Q1",
+                  "question": "What current provider-side delivery context is available for the incident window?",
+                  "why_it_matters": "The available provider status is stale and does not establish provider health during the incident."
+                },
+                {
+                  "id": "Q2",
+                  "question": "What do receiver-side logs show about the HTTP 503 responses?",
+                  "why_it_matters": "They may identify why the receiver returned 503; the observed responses alone do not confirm the underlying cause."
+                }
+              ],
+              "evidence_ids": [
+                "E001",
+                "E003",
+                "E004",
+                "E005"
+              ],
+              "executed_tools": [
+                "get_callback_attempts",
+                "get_queue_health",
+                "get_provider_status"
+              ],
+              "recommended_owner": "merchant_integration",
+              "recommended_action": "escalate_internal",
+              "claims": [
+                "receiver_503_observed",
+                "queue_healthy",
+                "provider_status_stale"
+              ]
+            },
+            "hypotheses": [
+              {
+                "id": "H1",
+                "statement": "Callback attempts may be absent or unavailable for the affected payments.",
+                "status": "rejected",
+                "supporting_evidence": [],
+                "contradicting_evidence": [
+                  "E003"
+                ],
+                "missing_evidence": []
+              },
+              {
+                "id": "H2",
+                "statement": "The callback pre-dispatch queue may be degraded and preventing or delaying delivery.",
+                "status": "rejected",
+                "supporting_evidence": [],
+                "contradicting_evidence": [
+                  "E004"
+                ],
+                "missing_evidence": []
+              },
+              {
+                "id": "H3",
+                "statement": "The customer-visible callback issue is associated with HTTP 503 responses and no acknowledgements for the cohort; the underlying source of those responses remains undetermined.",
+                "status": "supported",
+                "supporting_evidence": [
+                  "E003"
+                ],
+                "contradicting_evidence": [],
+                "missing_evidence": [
+                  "Current provider-side delivery context and receiver-side logs for the 503 responses."
+                ]
+              }
+            ],
+            "open_questions": [
+              {
+                "id": "Q1",
+                "question": "What current provider-side delivery context is available for the incident window?",
+                "why_it_matters": "The available provider status is stale and does not establish provider health during the incident."
+              },
+              {
+                "id": "Q2",
+                "question": "What do receiver-side logs show about the HTTP 503 responses?",
+                "why_it_matters": "They may identify why the receiver returned 503; the observed responses alone do not confirm the underlying cause."
+              }
+            ]
+          },
+          "metadata": {
+            "model": "gpt-6-luna",
+            "reasoning_effort": "high",
+            "input_tokens": 3877,
+            "output_tokens": 1676,
+            "cached_tokens": 1844,
+            "duration_ms": 16387,
+            "response_id": "resp_06b889bb29bfdc5f016ab30dad1b6487d2b3b76bdfe02e389c",
+            "attempts": 1
+          }
+        }
+      ],
+      "memory": []
+    }
+  ],
+  "proposals": [
+    {
+      "id": "72265e03-9078-44da-969f-6bd5aa281e33",
+      "incident_id": "6d8c1ca7-2169-4ffa-9e36-b862f954a06d",
+      "incident_revision": 3,
+      "type": "escalation",
+      "owner": "merchant_integration",
+      "title": "Investigate Callback receiver responses: attempts for all three affected payments received HTTP 503 responses and none were acknowledged (E003). The pre-dispatch queue was healthy (E004). This localizes the customer-visible failure domain to the receiver side, but does not establish why it returned 503; provider status is stale for this incident (E005).",
+      "body": "Incident: 6d8c1ca7-2169-4ffa-9e36-b862f954a06d | revision: 2 | run: a318d190-733f-4a24-9696-0fc0a0daaba0\nScope: merchant_demo / demo_apm / sandbox\nWindow: 2026-09-22T10:00:00Z — 2026-09-22T10:05:00Z | as of: 2026-09-22T10:05:00Z\nImpact: 3 potentially affected / 5 unique payments; membership complete=true; severity=medium\nOwner: merchant_integration | root cause: localized\nAssessment: Three completed payments are missing confirmed callbacks (E001). Attempts existed for all three, with four HTTP 503 responses and no acknowledgements (E003); the queue was healthy (E004). Escalate to merchant integration for human review of the receiver responses. The failure domain is localized, but the underlying cause is not confirmed; provider status is stale (E005).\nHypothesis H1 (rejected): Callback attempts may be absent or unavailable for the affected payments. [support: ; contradict: E003]\nHypothesis H2 (rejected): The callback pre-dispatch queue may be degraded and preventing or delaying delivery. [support: ; contradict: E004]\nHypothesis H3 (supported): The customer-visible callback issue is associated with HTTP 503 responses and no acknowledgements for the cohort; the underlying source of those responses remains undetermined. [support: E003; contradict: ]\nEvidence E001 | payments | observed 2026-09-22T10:05:00Z | usable=true | run a318d190-733f-4a24-9696-0fc0a0daaba0: 5 unique payments; 3 completed payments missing confirmed callbacks (potential impact)\nEvidence E003 | callbacks | observed 2026-09-22T10:05:00Z | usable=true | run a318d190-733f-4a24-9696-0fc0a0daaba0: 3 unique payments checked; 3 with attempts, 0 acknowledged; complete=true\nEvidence E004 | queue | observed 2026-09-22T10:05:00Z | usable=true | run a318d190-733f-4a24-9696-0fc0a0daaba0: Queue depth=0, oldest=0s, worker=healthy; complete=true\nEvidence E005 | provider | observed 2026-09-22T10:05:00Z | usable=true | run a318d190-733f-4a24-9696-0fc0a0daaba0: Provider status=operational; fresh for incident=false\nNext check: What current provider-side delivery context is available for the incident window? — The available provider status is stale and does not establish provider health during the incident.\nNext check: What do receiver-side logs show about the HTTP 503 responses? — They may identify why the receiver returned 503; the observed responses alone do not confirm the underlying cause.\nClosure requires fresh callback acknowledgements for every original item and healthy new traffic, followed by human approval.",
+      "status": "approved",
+      "created_at": "2026-09-23T01:22:37.382768+02:00",
+      "decided_at": "2026-09-23T01:22:37.394331+02:00",
+      "decision_note": "Synthetic evaluator human-approval fixture"
+    },
+    {
+      "id": "8b94b393-0045-4682-b0b7-37ae1dfc2127",
+      "incident_id": "6d8c1ca7-2169-4ffa-9e36-b862f954a06d",
+      "incident_revision": 8,
+      "type": "closure",
+      "owner": "tech_ops",
+      "title": "Original impact recovered",
+      "body": "{\"new_traffic_healthy\":\"pass\",\"original_cohort_recovered\":\"pass\",\"unresolved_original_items\":0,\"closure_allowed\":true}",
+      "status": "approved",
+      "created_at": "2026-09-23T01:22:37.412379+02:00",
+      "decided_at": "2026-09-23T01:22:37.412114+02:00",
+      "decision_note": "Synthetic evaluator closure approval"
+    }
+  ]
+}

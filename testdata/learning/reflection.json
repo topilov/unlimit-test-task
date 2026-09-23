@@ -1,0 +1,9 @@
+{
+  "summary": "Scripted demonstration: feedback reinforces checking dispatch before blaming the receiver when no attempts exist.",
+  "lesson": {
+    "condition": "Completed payments have no callback attempts in a complete snapshot.",
+    "check": "Inspect callback queue and dispatcher health before attributing the failure to the receiver.",
+    "rationale": "Missing attempts localize the next useful check before delivery; they do not establish receiver failure.",
+    "evidence_ids": ["@get_callback_attempts"]
+  }
+}
